@@ -1,0 +1,1 @@
+# nixmud2-stable

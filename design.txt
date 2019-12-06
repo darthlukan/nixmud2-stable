@@ -1,0 +1,105 @@
+Software design documentation:
+
+https://en.wikipedia.org/wiki/Software_design
+
+https://12factor.net/
+
+---------------------------------------------------------------------------
+Overall Idea
+---------------------------------------------------------------------------
+
+  Mud built in python, running over telnet with color coded text.
+Characters, their inventories, creatures, maps, and item
+databases to store information.  This is to allow plugin capability
+for new races, new items, maps, etc without having to change hard
+coded features.
+
+  The mud should load all classes and databases at startup, pulling
+the plain text files to populate these.  For example, items should
+be loaded from a plain text file into the items class, this way new
+items can be added at anytime without having to rewrite the general
+codebase.
+
+  The mud server should have some simple hardcoded features.  This
+will include the ability to fight creatures loaded into the map,
+move around with a given set up commands, and interact with objects.
+Including but not limited to opening doors, climbing a ladder, moving
+east to a new room, cast a spell, drink a potion, write a note,
+or join a group.
+
+  During early design the mud should be organized in a consistent
+structure.  Config files should be written in same formats, Classes
+and their respective functions should be in the same file, main loop
+file should be as trimmed down as possible to remain readable, and
+databases should all use the same format.
+
+  This may look as:
+Main loop
+Player file (including all classes, creation, and anything pertaining)
+Connections file (relevant information to connections and disconnections)
+actions file (containing only commands directly related to actions)
+combat file (containing the functions related to combat including casting)
+Jobs file (would have similarly what goes into a job be it skills, spells)
+
+---------------------------------------------------------------------------
+server.py
+---------------------------------------------------------------------------
+  The server file handles via telnet protocols, opening a socket and the
+binding to an ip and port.  It catagorizes events, and has the capability
+to send a message to a specific id defined in other files.
+
+  This file handles specificly connections, disconnections, and commads,
+communications with the client, and building lists of events waiting to be
+processed as well as of commands to add and subtract from said list.
+
+---------------------------------------------------------------------------
+main.py
+---------------------------------------------------------------------------
+  The main loop file will import and assign all class variables as well as
+their functions, maps and other data from config files, as well as populate
+associated databases with said data.  It will then loop the server to keep
+it active until shutdown, processing all connections, commands, and based
+on id of players connected direct the flow of the rest of the classes.
+
+  Commands, functions beyond the scope of the main loop, and clutter will
+NOT be thrown into the main loop file.  The main loop should remain as
+small as functionality allows.
+---------------------------------------------------------------------------
+Player class
+---------------------------------------------------------------------------
+name
+age
+sex
+race
+skills (sperate class)
+{
+(skill based system or level based system)
+basic skills everyone has
+}
+str
+dex
+vit
+int
+mnd
+cha
+maxWT
+current WT
+maxHP
+HP
+maxMP
+MP
+description (note player types up)
+hair color
+hair style
+eye color
+height
+weight
+
+inventory (seperate class include equipment slots)
+---------------------------------------------------------------------------
+Graphical Client Test
+---------------------------------------------------------------------------
+make a client in unity that connects via telnet and reads the
+message "--MSGBOX this connected properly" and puts "this connected
+properly" in a message box.
+---------------------------------------------------------------------------
